@@ -4,13 +4,15 @@ import dk.sqmmer.venzusEconomy.core.EconomyService;
 import eu.okaeri.commands.annotation.Command;
 import eu.okaeri.commands.annotation.Context;
 import eu.okaeri.commands.annotation.Executor;
+import eu.okaeri.commands.bukkit.annotation.Permission;
+import eu.okaeri.commands.service.CommandService;
 import eu.okaeri.injector.annotation.Inject;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 @Command(label = "eco")
-public class EcoCmd {
+public class EcoCmd implements CommandService {
 
     @Inject private EconomyService eco;
 
@@ -35,22 +37,16 @@ public class EcoCmd {
     }
 
     @Executor(pattern = "give * *")
+    @Permission("venzuseco.admin")
     public void give(@Context Player sender, String name, double amount) {
-        if (!sender.hasPermission("venzuseco.admin")) {
-            sender.sendMessage("§cManglende tilladelse.");
-            return;
-        }
         OfflinePlayer target = Bukkit.getOfflinePlayer(name);
         eco.deposit(target.getUniqueId(), amount);
         sender.sendMessage("§a+ " + amount + " til " + target.getName());
     }
 
     @Executor(pattern = "take * *")
+    @Permission("venzuseco.admin")
     public void take(@Context Player sender, String name, double amount) {
-        if (!sender.hasPermission("venzuseco.admin")) {
-            sender.sendMessage("§cManglende tilladelse.");
-            return;
-        }
         OfflinePlayer target = Bukkit.getOfflinePlayer(name);
         boolean ok = eco.withdraw(target.getUniqueId(), amount);
         sender.sendMessage(ok ? "§c- " + amount + " fra " + target.getName() : "§cIkke nok saldo.");

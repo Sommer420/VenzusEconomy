@@ -1,6 +1,6 @@
 name: VenzusEconomy
 main: dk.sqmmer.venzusEconomy.VenzusEconomyPlugin
-version: ${version}
+version: ''${version}'
 api-version: 1.13
 author: Sqmmer
 softdepend:

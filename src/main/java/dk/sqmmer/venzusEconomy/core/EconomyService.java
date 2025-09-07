@@ -8,4 +8,6 @@ public interface EconomyService {
     double getBalance(UUID uuid);
     boolean deposit(UUID uuid, double amount);
     boolean withdraw(UUID uuid, double amount);
+
+    boolean set(UUID uuid, double amount);
 }

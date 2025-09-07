@@ -83,4 +83,16 @@ public class SqliteEconomy implements EconomyService {
             return ps.executeUpdate() > 0;
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
+
+    @Override
+    public boolean set(UUID uuid, double amount) {
+        if (amount < 0) return false;
+        createAccount(uuid);
+        try (Connection c = con();
+             PreparedStatement ps = c.prepareStatement("UPDATE accounts SET balance=? WHERE uuid=?")) {
+            ps.setDouble(1, amount);
+            ps.setString(2, uuid.toString());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) { e.printStackTrace(); return false; }
+    }
 }
