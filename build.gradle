@@ -5,24 +5,30 @@ plugins {
 }
 
 group = 'com.github.Sommer420'
-version = '1.0.0'
+version = '1.0.1'
 
 java { toolchain { languageVersion = JavaLanguageVersion.of(8) } }
 
 repositories {
     mavenCentral()
-    maven { url 'https://storehouse.okaeri.eu/repository/maven-releases/' }
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url 'https://oss.sonatype.org/content/groups/public/' }
+    maven { url 'https://storehouse.okaeri.eu/repository/maven-releases/' }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+
     implementation 'eu.okaeri:okaeri-platform-bukkit:0.4.19'
     implementation 'eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.1'
-    compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     implementation 'org.xerial:sqlite-jdbc:3.46.0.0'
+    compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
+
     compileOnly 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
 }
+
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
@@ -33,22 +39,25 @@ shadowJar {
     archiveBaseName.set('VenzusEconomy')
     archiveVersion.set(project.version as String)
     archiveClassifier.set('')
+    minimize()
+
     relocate 'eu.okaeri',          'dk.sqmmer.venzuseco.libs.okaeri'
     relocate 'org.yaml.snakeyaml', 'dk.sqmmer.venzuseco.libs.snakeyaml'
     relocate 'org.sqlite',         'dk.sqmmer.venzuseco.libs.sqlite'
-    minimize()
 }
+
+tasks.assemble.dependsOn tasks.shadowJar
+jar.enabled = false
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            from components.java
             groupId = project.group
             artifactId = 'VenzusEconomy'
             version = project.version
+            artifact(tasks.shadowJar) {
+                classifier = ''
+            }
         }
     }
 }
-
-jar.enabled = false
-build.dependsOn(shadowJar)
