@@ -1,8 +1,7 @@
 name: VenzusEconomy
-version: '1.0-SNAPSHOT'
-main: dk.sqmmer.venzusEconomy.VenzusEconomy
-api-version: '1.18'
-prefix: Vagt
-authors: [ Sommer ]
-description: Economyplugin til Venzus.
-website: arcmc.dk, sqmmer.dk
+main: dk.sqmmer.venzusEconomy.VenzusEconomyPlugin
+version: ${version}
+api-version: 1.13
+author: Sqmmer
+softdepend:
+  - Vault
